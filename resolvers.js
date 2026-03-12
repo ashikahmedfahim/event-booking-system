@@ -1,29 +1,37 @@
+const bcrypt = require('bcrypt');
 const Event = require('./models/event');
+const User = require('./models/user');
+const ExpressError = require('./expressError');
 
 const resolvers = {
-    events: () => {
-        return Event.find().then(events => {
-            return events.map(event => {
-                return { ...event._doc, _id: event.id };
-            });
-        }).catch(err => {
-            console.error('Error fetching events:', err);
-            throw err;
+    events: async () => {
+        const events = await Event.find();
+        return events.map(event => {
+            return { ...event._doc, _id: event.id };
         });
     },
-    createEvent: ({ eventInput }) => {
+    createEvent: async ({ eventInput }) => {
         const event = new Event({
             title: eventInput.title,
             description: eventInput.description,
             price: +eventInput.price,
-            date: new Date(eventInput.date)
+            date: new Date(eventInput.date),
         });
-        return event.save().then((result) => {
-            return { ...result._doc, _id: result.id };
-        }).catch(err => {
-            console.error('Error creating event:', err);
-            throw err;
+        const result = await event.save();
+        return { ...result._doc, _id: result.id };
+    },
+    createUser: async ({ userInput }) => {
+        const existingUser = await User.findOne({ email: userInput.email });
+        if (existingUser?.email) throw new ExpressError(400, 'User already exists with this email');
+
+        const hashedPassword = bcrypt.hashSync(userInput.password, 12);
+        const user = new User({
+            email: userInput.email,
+            password: hashedPassword
         });
+
+        const result = await user.save();
+        return { ...result._doc, _id: result.id, password: null };
     }
 };
 
