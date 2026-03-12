@@ -1,9 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { createHandler } = require('graphql-http/lib/use/express');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 const resolvers = require('./resolvers');
 const getGraphiQLHTML = require('./graphiql');
 const graphqlSchema = require('./schema');
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -23,6 +26,13 @@ app.post('/graphql', createHandler({
     rootValue: resolvers,
 }));
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+mongoose.connect(process.env.DATABASE_URL)
+    .then(() => {
+        console.log('Connected to MongoDB');
+        app.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
+        });
+    })
+    .catch(err => {
+        console.error('Error connecting to MongoDB:', err);
+    });
