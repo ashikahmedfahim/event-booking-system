@@ -1,6 +1,18 @@
+const events = [];
+
 const resolvers = {
-    events: () => ['Event 1', 'Event 2'],
-    createEvent: ({ name }) => name,
+    events: () => events,
+    createEvent: ({ eventInput }) => {
+        const event = {
+            _id: Math.random().toString(),
+            title: eventInput.title,
+            description: eventInput.description,
+            price: +eventInput.price,
+            date: eventInput.date
+        };
+        events.push(event);
+        return event;
+    }
 };
 
 module.exports = resolvers;
