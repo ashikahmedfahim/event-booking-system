@@ -5,7 +5,7 @@ const ExpressError = require('./expressError');
 
 const resolvers = {
     events: async () => {
-        const events = await Event.find();
+        const events = await Event.find().populate('creator');
         return events.map(event => {
             return { ...event._doc, _id: event.id };
         });
@@ -16,6 +16,7 @@ const resolvers = {
             description: eventInput.description,
             price: +eventInput.price,
             date: new Date(eventInput.date),
+            creator: eventInput.creator
         });
         const result = await event.save();
         return { ...result._doc, _id: result.id };
@@ -31,6 +32,7 @@ const resolvers = {
         });
 
         const result = await user.save();
+
         return { ...result._doc, _id: result.id, password: null };
     }
 };

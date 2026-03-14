@@ -7,6 +7,7 @@ const graphqlSchema = buildSchema(`
         description: String!
         price: Float!
         date: String!
+        creator: User!
     }
     type User {
         _id: ID!
@@ -19,6 +20,7 @@ const graphqlSchema = buildSchema(`
         description: String!
         price: Float!
         date: String!
+        creator: ID!
     }
     input UserInput {
         email: String!
