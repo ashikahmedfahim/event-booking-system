@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const resolvers = require('./resolvers');
 const getGraphiQLHTML = require('./graphiql');
-const graphqlSchema = require('./schema');
+const graphqlSchema = require('./schemas');
 const catchAsync = require('./catchAsync');
 dotenv.config();
 
