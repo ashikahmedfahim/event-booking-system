@@ -1,0 +1,30 @@
+.main-navigation-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #6370e6af;
+  padding: 16px;
+  box-shadow: 0 5px 4px 0 rgba(0,0,0,.2);
+}
+
+.main-navigation-list{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-navigation-list li {
+  list-style: none;
+  text-decoration: none;
+  margin: 0 8px;
+  font-size: 24px;
+}
+
+.main-navigation-list-item {
+  text-decoration: none;
+  color: #fff;
+}
+
+.main-navigation-list-item:hover {
+  color: #888888;
+}
