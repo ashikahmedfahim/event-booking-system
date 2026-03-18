@@ -1,11 +1,13 @@
 import React from 'react'
 import './Auth.css'
+import AuthContext from '../context/auth-context';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = React.useState(true);
   const emailRef = React.useRef();
   const passwordRef = React.useRef();
   const confirmPasswordRef = React.useRef();
+  const authContext = React.useContext(AuthContext);
 
   const loginHandler = async (event) => {
     const email = emailRef.current.value;
@@ -39,7 +41,10 @@ const AuthPage = () => {
       body: JSON.stringify(requestBody)
     });
     const data = await response.json();
-    console.log(data);
+    if (data.data && data.data.login) {
+      const { userId, token, tokenExpiration } = data.data.login;
+      authContext.login(userId, token, tokenExpiration);
+    }
   }
 
   const signupHandler = async (event) => {
@@ -78,10 +83,10 @@ const AuthPage = () => {
       body: JSON.stringify(requestBody)
     });
     const data = await response.json();
-    console.log(data);
+    setIsLogin(true);
   }
 
-  
+
   const submitHandler = async (event) => {
     event.preventDefault();
     if (isLogin) {
