@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './Events.css'
 import Modal from '../components/Modal';
 import AuthContext from '../context/auth-context';
 
 const Events = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [events, setEvents] = React.useState([]);
   const authContext = React.useContext(AuthContext);
   const titleRef = React.useRef();
   const descriptionRef = React.useRef();
@@ -60,6 +61,41 @@ const Events = () => {
     console.log(data);
   }
 
+  const fetchEvents = async () => {
+    const requestBody = {
+      query: `
+        query {
+          events {
+            _id
+            title
+            description
+            price
+            date
+            creator {
+              _id
+              email
+            }
+          }
+        }
+      `
+    };
+    const response = await fetch('http://localhost:4000/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    });
+    const data = await response.json();
+    if (data.data && data.data.events) {
+      setEvents(data.data.events);
+    }
+  }
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
   return (
     <div className='events-container'>
       <h1>Share your own events!</h1>
@@ -86,7 +122,17 @@ const Events = () => {
           </div>
         </form>
       </Modal>}
-
+      <div className='events-list'>
+        {events.map(event => (
+          <div key={event._id} className='event-item'>
+            <h2>{event.title}</h2>
+            <p>{event.description}</p>
+            <p>Price: ${event.price}</p>
+            <p>Date: {new Date(event.date).toLocaleDateString()}</p>
+            <p>Creator: {event.creator.email}</p>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
