@@ -1,6 +1,7 @@
 import React from 'react'
 import './Auth.css'
 import AuthContext from '../context/auth-context';
+import { useNavigate } from 'react-router-dom';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = React.useState(true);
@@ -8,6 +9,7 @@ const AuthPage = () => {
   const passwordRef = React.useRef();
   const confirmPasswordRef = React.useRef();
   const authContext = React.useContext(AuthContext);
+  const navigate = useNavigate();
 
   const loginHandler = async (event) => {
     const email = emailRef.current.value;
@@ -44,6 +46,7 @@ const AuthPage = () => {
     if (data.data && data.data.login) {
       const { userId, token, tokenExpiration } = data.data.login;
       authContext.login(userId, token, tokenExpiration);
+      navigate('/');
     }
   }
 

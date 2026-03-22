@@ -25,6 +25,16 @@
   color: #fff;
 }
 
+.main-navigation-list-item-button {
+  background-color: #6370e6af;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 4px 16px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
 .main-navigation-list-item:hover {
   color: #888888;
 }
