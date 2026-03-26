@@ -5,6 +5,7 @@ import './App.css';
 import AuthContext from './context/auth-context';
 import { useContext } from 'react';
 import Events from './pages/Events';
+import Bookings from './pages/Bookings';
 
 function App() {
   const authContext = useContext(AuthContext);
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<h1>Welcome to the Event Booking System</h1>} />
           <Route path="/auth" element={<AuthPage />} />
           {isLoggedIn && <Route path="/events" element={<Events />} />}
+          {isLoggedIn && <Route path="/bookings" element={<Bookings />} />}
         </Routes>
       </div>
     </BrowserRouter>

@@ -3,18 +3,18 @@ const Event = require('../models/event');
 const ExpressError = require('../expressError');
 
 module.exports = {
-    bookings: async () => {
+    bookings: async (args, req) => {
         const bookings = await Booking.find().populate('event').populate('user');
         return bookings.map(booking => {
-            return { ...booking._doc, _id: booking.id };
+            return { ...booking._doc, _id: booking.id, event: { ...booking.event._doc, date: new Date(booking.event._doc.date).toISOString() }, createdAt: new Date(booking._doc.createdAt).toISOString() };
         });
     },
-    bookEvent: async ({ eventId }) => {
+    bookEvent: async ({ eventId, userId }) => {
         const event = await Event.findById(eventId);
         if (!event) throw new ExpressError(404, 'Event not found');
         const booking = new Booking({
             event: eventId,
-            user: '69b29694012e86494706b8d7' // Replace with actual user ID from authentication
+            user: userId
         });
         const result = await booking.save();
         return { ...result._doc, _id: result.id };

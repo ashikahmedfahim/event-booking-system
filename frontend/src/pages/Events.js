@@ -94,6 +94,35 @@ const Events = () => {
     }
   }
 
+  const handleBookEvent = async (eventId) => {
+    const requestBody = {
+      query: `
+        mutation BookEvent($eventId: ID!, $userId: ID!) {
+          bookEvent(eventId: $eventId, userId: $userId) {
+            _id
+          }
+        }
+      `,
+      variables: {
+        eventId,
+        userId: authContext.userId
+      }
+    };
+
+    const response = await fetch('http://localhost:4000/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authContext.token}`
+      },  
+      body: JSON.stringify(requestBody)
+    });
+    const data = await response.json();
+    if (data.data && data.data.bookEvent) {
+      alert('Event booked successfully!');
+    }
+  }
+
   useEffect(() => {
     fetchEvents();
   }, []);
@@ -135,7 +164,9 @@ const Events = () => {
               <p>Creator: {event.creator.email}</p>
             </div>
             <div>
-              {authContext.userId !== event.creator._id && <button className='book-button'>Book</button>}
+              {authContext.userId !== event.creator._id && <button className='book-button' onClick={() => handleBookEvent(event._id)}>
+                Book Event
+              </button>}
             </div>
           </div>
         ))}

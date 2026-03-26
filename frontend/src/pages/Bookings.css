@@ -1,0 +1,32 @@
+.bookings-page {
+    margin: auto;
+    max-width: 800px;
+    padding: 16px;
+}
+
+.bookings-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.bookings-list {
+    list-style: none;
+    padding: 0;
+}
+
+.booking-item {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+
+.cancel-button {
+    padding: 8px 16px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
