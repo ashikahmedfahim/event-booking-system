@@ -58,7 +58,9 @@ const Events = () => {
       body: JSON.stringify(requestBody)
     });
     const data = await response.json();
-    console.log(data);
+    if (data.data && data.data.createEvent) {
+      fetchEvents();
+    }
   }
 
   const fetchEvents = async () => {
@@ -125,11 +127,16 @@ const Events = () => {
       <div className='events-list'>
         {events.map(event => (
           <div key={event._id} className='event-item'>
-            <h2>{event.title}</h2>
-            <p>{event.description}</p>
-            <p>Price: ${event.price}</p>
-            <p>Date: {new Date(event.date).toLocaleDateString()}</p>
-            <p>Creator: {event.creator.email}</p>
+            <div>
+              <h2>{event.title}</h2>
+              <p>{event.description}</p>
+              <p>Price: ${event.price}</p>
+              <p>Date: {new Date(event.date).toLocaleDateString()}</p>
+              <p>Creator: {event.creator.email}</p>
+            </div>
+            <div>
+              {authContext.userId !== event.creator._id && <button className='book-button'>Book</button>}
+            </div>
           </div>
         ))}
       </div>

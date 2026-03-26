@@ -4,7 +4,7 @@ module.exports = {
     events: async () => {
         const events = await Event.find().populate('creator');
         return events.map(event => {
-            return { ...event._doc, _id: event.id };
+            return { ...event._doc, _id: event.id, date: new Date(event._doc.date).toISOString() };
         });
     },
     createEvent: async ({ eventInput }) => {
